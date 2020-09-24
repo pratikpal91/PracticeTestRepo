@@ -1,0 +1,42 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from ProductCalalogServiceImplService WSDL service -->
+
+  <service name="ProductCalalogServiceImpl" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://impl.service.soap.com"/>
+      <parameter name="wsdlServiceElement" value="ProductCalalogServiceImplService"/>
+      <parameter name="schemaQualified" value="http://impl.service.soap.com"/>
+      <parameter name="wsdlServicePort" value="ProductCalalogServiceImpl"/>
+      <parameter name="className" value="com.soap.service.impl.ProductCalalogServiceImplSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="ProductCalalogServiceImpl"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="insertProduct" qname="operNS:insertProduct" xmlns:operNS="http://impl.service.soap.com" soapAction="" >
+        <parameter qname="pns:product" xmlns:pns="http://impl.service.soap.com" type="tns:Product" xmlns:tns="http://impl.service.soap.com"/>
+      </operation>
+      <operation name="searchById" qname="operNS:searchById" xmlns:operNS="http://impl.service.soap.com" returnQName="retNS:searchByIdReturn" xmlns:retNS="http://impl.service.soap.com" returnType="rtns:Product" xmlns:rtns="http://impl.service.soap.com" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://impl.service.soap.com" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getAllProducts" qname="operNS:getAllProducts" xmlns:operNS="http://impl.service.soap.com" returnQName="retNS:getAllProductsReturn" xmlns:retNS="http://impl.service.soap.com" returnType="rtns:Product" xmlns:rtns="http://impl.service.soap.com" soapAction="" >
+      </operation>
+      <parameter name="allowedMethods" value="getAllProducts searchById insertProduct"/>
+
+      <typeMapping
+        xmlns:ns="http://impl.service.soap.com"
+        qname="ns:Product"
+        type="java:com.soap.service.impl.Product"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+  </service>
+</deployment>

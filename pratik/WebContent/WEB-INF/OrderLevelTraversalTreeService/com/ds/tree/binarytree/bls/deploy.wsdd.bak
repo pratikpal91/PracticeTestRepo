@@ -1,0 +1,40 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from OrderLevelTraversalTreeService WSDL service -->
+
+  <service name="OrderLevelTraversalTree" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://bls.binarytree.tree.ds.com"/>
+      <parameter name="wsdlServiceElement" value="OrderLevelTraversalTreeService"/>
+      <parameter name="schemaQualified" value="http://bls.binarytree.tree.ds.com"/>
+      <parameter name="wsdlServicePort" value="OrderLevelTraversalTree"/>
+      <parameter name="className" value="com.ds.tree.binarytree.bls.OrderLevelTraversalTreeSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="OrderLevelTraversalTree"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="main" qname="operNS:main" xmlns:operNS="http://bls.binarytree.tree.ds.com" soapAction="" >
+        <parameter qname="pns:args" xmlns:pns="http://bls.binarytree.tree.ds.com" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="levelOrderTraversal" qname="operNS:levelOrderTraversal" xmlns:operNS="http://bls.binarytree.tree.ds.com" soapAction="" >
+        <parameter qname="pns:root" xmlns:pns="http://bls.binarytree.tree.ds.com" type="tns:anyType" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="main levelOrderTraversal"/>
+
+      <typeMapping
+        xmlns:ns="http://bls.binarytree.tree.ds.com"
+        qname="ns:>levelOrderTraversalResponse"
+        type="java:com.ds.tree.binarytree.bls.LevelOrderTraversalResponse"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+  </service>
+</deployment>
